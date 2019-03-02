@@ -1,0 +1,83 @@
+- hosts: localhost
+  vars:
+    user_name: user
+    password: password
+
+  tasks:
+    - name: yum install default
+      yum: name={{ item }}
+      become: true
+      with_items:
+        - epel-release
+        - vim
+
+    - name: yum install docker
+      yum: name={{ item }}
+      become: true
+      with_items:
+        - yum-utils
+        - device-mapper-persistent-data
+        - lvm2
+        - docker-ce
+
+    - name: add user.
+      user:
+        name: "{{user_name}}"
+        createhome: yes
+        password: "{{ password | password_hash('sha512') }}"
+        update_password: on_create
+        generate_ssh_key: yes
+      become: yes
+
+    - name: make .ssh directory
+      file:
+        path: /home/{{user_name}}/.ssh
+        state: directory
+        owner: "{{user_name}}"
+        group: "{{user_name}}"
+        mode:  0700
+
+    - name: copy ssh key
+      copy:
+        src: /home/{{user_name}}/.ssh/id_rsa.pub
+        dest: /home/{{user_name}}/.ssh/authorized_keys
+        owner: "{{user_name}}"
+        group: "{{user_name}}"
+        mode: 0600
+
+    - name: add sudoers.
+      lineinfile:
+        backup: yes
+        path: /etc/sudoers
+        state: present
+        regexp: "^%{{user_name}} ALL="
+        line: "%{{user_name}} ALL=(ALL) NOPASSWD: ALL"
+        validate: '/usr/sbin/visudo -cf %s'
+
+    - name: sshd conf1
+      lineinfile:
+         backup: yes
+         path:  /etc/ssh/sshd_config
+         regexp: '^\#Port 22'
+         line: 'Port 22'
+         backrefs: yes
+
+    - name: sshd conf2
+      lineinfile:
+        path:  /etc/ssh/sshd_config
+        regexp: '^\#PermitRootLogin yes'
+        line: 'PermitRootLogin no'
+        backrefs: yes
+
+    - name: sshd conf3
+      lineinfile:
+        path:  /etc/ssh/sshd_config
+        regexp: '^PasswordAuthentication yes'
+        line: 'PasswordAuthentication no'
+        backrefs: yes
+
+    - name: restart service sshd
+      systemd:
+        name: sshd
+        state: restarted
+
