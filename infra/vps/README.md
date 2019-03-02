@@ -31,8 +31,6 @@ sudo scp -rp root@<ip-addresss>:/home/<username>/.ssh/id_* ~/.ssh
 ```
 
 
-
-
 ## 参考
 
 - 以下からソースを拝借しsunflower用に微修正しました。ありがとうございます(´；ω；｀)
