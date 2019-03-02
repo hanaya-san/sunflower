@@ -6,7 +6,15 @@
 
 ![sunflower image](https://github.com/hanaya-san/sunflower/blob/images/images/sunflower.jpg?raw=true)
 
+---
 
+## ディレクトリについて
+
+- doc
+    - 各種ドキュメント
+
+- infra
+    - 環境構築関連
 
 
 
