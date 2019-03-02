@@ -8,21 +8,15 @@ echo ""
 
 yum update
 yum install -y ansible
+yum install epel-release
 
-rm -r /tmp/init-vps
-cd /tmp/
-mkdir init-vps
+rm -rf /tmp/init-vps
+mkdir /tmp/init-vps
+cp -rp ~/init-vps/init.yml /tmp/init-vps/
 
-# git init
-# git config core.sparsecheckout true
-# git remote add origin リポジトリのURL # TODO: 追記する
-# echo 目的のフォルダ > .git/info/sparse-checkout # TODO: 追記する
-# git pull origin master
-# cd /tmp/ansible-init/
-
+echo "======================================"
 echo 'ansible-playbook init.yml --extra-vars "user_name=$1"'
-ansible-playbook init.yml --extra-vars "user_name=$1 password=$2"
-
+ansible-playbook /tmp/init-vps/init.yml --extra-vars "user_name=$1 password=$2"
 
 echo "======================================"
 echo "vps init complete."
@@ -31,7 +25,7 @@ echo ""
 ls -l /home/$1/.ssh
 echo ""
 
-rm -r /tmp/init-vps
+rm -rf /tmp/init-vps
 export HISTSIZE=0
 rm .bash_history
 

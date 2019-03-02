@@ -4,22 +4,6 @@
     password: password
 
   tasks:
-    - name: yum install default
-      yum: name={{ item }}
-      become: true
-      with_items:
-        - epel-release
-        - vim
-
-    - name: yum install docker
-      yum: name={{ item }}
-      become: true
-      with_items:
-        - yum-utils
-        - device-mapper-persistent-data
-        - lvm2
-        - docker-ce
-
     - name: add user.
       user:
         name: "{{user_name}}"

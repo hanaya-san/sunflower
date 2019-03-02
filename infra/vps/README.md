@@ -1,8 +1,12 @@
 # VPS環境構築ツール
 
+## 設定内容
+
+- [チュートリアル：CentOS 7（さくらのVPS）サーバ作成直後に設定しておくべき初期セキュリティ設定 – さくらのVPSニュース](https://vps-news.sakura.ad.jp/tutorials/centos7-initial-settings/)
+
 ## 使い方
 
-1. 作業マシンからVPSサーバーにインストール資材を配置
+1. `作業マシンから`VPSサーバーにインストール資材を配置
 
 ```bash
 cd sunflower/infra/vps
@@ -12,13 +16,22 @@ sudo scp -rp ./init-vps root@<IP-ADDRESSS>:~/
 - 初期化前はrootユーザを使用する
 
 
-1. VPSにログイン後、インストールシェルの実行
+1. VPSにログイン後、`VPSから`インストールシェルの実行
 
 ```bash
-ssh root@<IP-ADDRESSS>
+ssh root@<ip-addresss>
 chmod 755 ~/init-vps/startup.sh
 bash ~/init-vps/startup.sh {username} {password}
 ```
+
+1. `作業マシン`からサーバーへ鍵をもってくる
+
+```bash
+sudo scp -rp root@<ip-addresss>:/home/<username>/.ssh/id_* ~/.ssh
+```
+
+
+
 
 ## 参考
 
