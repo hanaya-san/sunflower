@@ -1,0 +1,7 @@
+version: '3'
+
+services:
+  sunflower-ct:
+    container_name: sunflower-ct
+    command: tail -f /dev/null
+
