@@ -4,7 +4,7 @@ services:
   node-ct:
     container_name: node-ct
     build:
-      context: ./Containers/Node/
+      context: ./context
       args:
         NODE_VERSION: '10.8.0'
     ports:
