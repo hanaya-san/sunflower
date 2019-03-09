@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  node-ct:
+    container_name: node-ct
+    build:
+      context: ./Containers/Node/
+      args:
+        NODE_VERSION: '10.8.0'
+    ports:
+      - 3000:3000
+    working_dir: /root/Work
+    volumes:
+      - /Users/kanap/Work:/root/Work
+    tty: true
+    command: tail -f /dev/null
+
