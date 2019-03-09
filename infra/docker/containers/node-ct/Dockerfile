@@ -44,10 +44,10 @@ RUN yum -y install curl-devel expat-devel gettext-devel openssl-devel zlib-devel
 # RUN yum install -y git2u-svn
 
 
-# Start Up Scripts
-RUN adduser -m app
-RUN mkdir -p /var/app && chown app:app /var/app
-ADD ./Scripts/startup.sh /var/app/startup.sh
-RUN chmod +x /var/app/startup.sh
-CMD ["/var/app/startup.sh"]
+# # Start Up Scripts
+# RUN adduser -m app
+# RUN mkdir -p /var/app && chown app:app /var/app
+# ADD ./Scripts/startup.sh /var/app/startup.sh
+# RUN chmod +x /var/app/startup.sh
+# CMD ["/var/app/startup.sh"]
 
