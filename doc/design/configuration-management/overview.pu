@@ -1,0 +1,25 @@
+@startuml
+
+title CI構成管理 概要図
+
+rectangle Mac {
+  rectangle 構成管理ツール {
+    (Ansible) as ANSIBLE
+    (環境変数) as ENV
+  }
+  (DockerFile) as DF
+}
+
+rectangle VPS as VPS {
+  (DockerFile) as VPS_DF
+  rectangle docker as VPS_DOCKER {
+    (drone) as VPS_DRONE
+  }
+}
+
+ENV ---> ANSIBLE: 読み込み(セットアップするユーザやPWなど)
+ANSIBLE ---> VPS: OS周りセットアップ(セキュリティなど)
+DF ---> VPS_DF: 転送(Ansibleで操作)
+VPS_DF ---> VPS_DOCKER: 構築(Ansibleで操作)
+
+@enduml

@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  node-ct:
+    container_name: node-ct
+    build:
+      context: ./containers/node-ct
+      args:
+        NODE_VERSION: '10.8.0'
+    ports:
+      - 3000:3000
+    working_dir: /root/Work
+    volumes:
+      - /Users/kanap/Work:/root/Work
+    tty: true
+    command: tail -f /dev/null
+
+  drone-server:
+    image: drone/drone:0.7.3
+    ports:
+      - 80:8000
+    volumes:
+      - ./drone:/var/lib/drone/
+    restart: always
+    environment:
+      - DRONE_OPEN=true # ユーザ登録を可能にする
+      - DRONE_HOST=${DRONE_HOST} # 後述
+      - DRONE_GITHUB=true # Githubを使用する
+      - DRONE_GITHUB_URL=${DRONE_GITHUB_URL} # Github Enterpriseを使用している場合に設定する
+      - DRONE_GITHUB_CLIENT=${DRONE_GITHUB_CLIENT} # 後述
+      - DRONE_GITHUB_SECRET=${DRONE_GITHUB_SECRET} # 後述
+      - DRONE_SECRET=${DRONE_SECRET} # 後述
+      - DRONE_GITHUB_PRIVATE_MODE=true # Github Enterpriseをプライベートモードで動かしている場合はtrueにする
+
+  drone-agent:
+    image: drone/drone:0.7.3
+    command: agent
+    restart: always
+    depends_on:
+      - drone-server
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - DRONE_SERVER=ws://drone-server:8000/ws/broker
+      - DRONE_SECRET=${DRONE_SECRET}
